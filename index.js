@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var app = express();
+var app = express.createServer();
 var cors = require('cors');
 var io = require('socket.io')(app);
 
