@@ -120,30 +120,33 @@ io.on('connection',function(socket){
 
     console.log(clientIndex)
 
-    var client = users[clientIndex]
-    // Check if user connected to any user
-    if (client.partner){
-      var parnerIndex = users.findIndex((element, index)=>{
-        if (element.id == socket.id){
-          return index;
-        }
-      })
+    if (clientIndex){
+      var client = users[clientIndex]
+      // Check if user connected to any user
+      if (client.partner){
+        var parnerIndex = users.findIndex((element, index)=>{
+          if (element.id == socket.id){
+            return index;
+          }
+        })
 
-      //Send message to partner that he is disconnected
-      io.sockets.connected[users[parnerIndex].id].emit('status', {status: "pending"});
-      users[parnerIndex].busy = false;
-      users[parnerIndex].partner = undefined;
+        //Send message to partner that he is disconnected
+        io.sockets.connected[users[parnerIndex].id].emit('status', {status: "pending"});
+        users[parnerIndex].busy = false;
+        users[parnerIndex].partner = undefined;
 
 
-      // Try to connect disconnected user to somone else
-      connectClients(users[parnerIndex].id);
+        // Try to connect disconnected user to somone else
+        connectClients(users[parnerIndex].id);
 
-      // Remove disconnected user from common list
-      users.splice(clientIndex, 1);
-    } else {
-      // Remove disconnected user from common list
-      users.splice(clientIndex, 1);
+        // Remove disconnected user from common list
+        users.splice(clientIndex, 1);
+      } else {
+        // Remove disconnected user from common list
+        users.splice(clientIndex, 1);
+      }
     }
+
 
 
 
