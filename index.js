@@ -1,8 +1,9 @@
-var express = require('express');
+
 var bodyParser = require('body-parser');
-var app = express.createServer();
 var cors = require('cors');
-var io = require('socket.io')(app);
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 app.set('port', (process.env.PORT || 80));
 
