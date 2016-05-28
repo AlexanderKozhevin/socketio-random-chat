@@ -6,8 +6,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-io.set('transports', ['xhr-polling']);
-io.set('polling duration', 10);
+
 
 
 app.set('port', (process.env.PORT || 80));
