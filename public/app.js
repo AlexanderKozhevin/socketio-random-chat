@@ -1,6 +1,6 @@
 $(document).ready(function(){
   console.log('superman3');
-  var socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true});
+  var socket = io.connect('http://damp-waters-91942.herokuapp.com');
   console.log('superman2');
   socket.on('connect', function () {
     console.log('superman');
