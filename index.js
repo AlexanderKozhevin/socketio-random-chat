@@ -118,6 +118,7 @@ io.on('connection',function(socket){
       }
     })
 
+    console.log(clientIndex)
 
     var client = users[clientIndex]
     // Check if user connected to any user
