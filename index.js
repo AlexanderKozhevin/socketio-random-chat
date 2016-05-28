@@ -5,6 +5,8 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+var express = require('express');
+
 app.set('port', (process.env.PORT || 80));
 
 //We don't really need this line, but it allows to send
