@@ -16,6 +16,10 @@ app.get('/',function(req,res){
 });
 
 
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
 function connectClients(clientID) {
 
   var filtered = users.filter((item) => {return !item.busy});
@@ -23,7 +27,7 @@ function connectClients(clientID) {
 
     var partner = undefined;
     while (!partner){
-      var randomInt = Math.round(Math.random()*filtered.length);
+      var randomInt = getRandomArbitrary(0, filtered.length);
       if (filtered[randomInt].id != clientID){
         partner = filtered[randomInt]
       }
