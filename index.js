@@ -8,7 +8,7 @@ var io = require('socket.io').listen(server);
 
 
 
-app.set('port', (process.env.PORT || 80));
+app.set('port', 80);
 
 //We don't really need this line, but it allows to send
 //requests from different domains
