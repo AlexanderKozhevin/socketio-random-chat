@@ -62,14 +62,14 @@ function connectClients(clientID) {
     users[secondClientIndex].partner = clientID;
 
     // Send messages to the clients that they are connected
-    io.sockets.socket(clientID).emit('status', {status: "connected", partner: partner.id});
-    io.sockets.socket(partner.id).emit('status', {status: "connected", partner: clientID});
+    io.sockets.connected[clientID].emit('status', {status: "connected", partner: partner.id});
+    io.sockets.connected[partner.id].emit('status', {status: "connected", partner: clientID});
 
 
   } else {
 
     // If there is not free users to connect - simpy wait untils someone else will connect.
-    io.sockets.socket(clientID).emit('status', {status: "pending"});
+    io.sockets.connected[clientID].emit('status', {status: "pending"});
 
   }
 
@@ -98,7 +98,7 @@ io.on('connection',function(socket){
   // Block 2 - message exchange
   //
   socket.on('message', function (data) {
-    io.sockets.socket(data.partner).emit('message', data);
+    io.sockets.connected[data.partner].emit('message', data);
   });
   //
   // End of block2
@@ -129,7 +129,7 @@ io.on('connection',function(socket){
       })
 
       //Send message to partner that he is disconnected
-      io.sockets.socket(users[parnerIndex].id).emit('status', {status: "pending"});
+      io.sockets.connected[users[parnerIndex].id].emit('status', {status: "pending"});
       users[parnerIndex].busy = false;
       users[parnerIndex].partner = undefined;
 
