@@ -23,7 +23,8 @@ function getRandomArbitrary(min, max) {
 function connectClients(clientID) {
 
   var filtered = users.filter((item) => {return !item.busy});
-  if (filtered.length){
+  if (filtered.length>1){
+
 
     var partner = undefined;
     while (!partner){
