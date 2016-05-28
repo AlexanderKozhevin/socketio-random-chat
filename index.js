@@ -18,7 +18,7 @@ app.get('/',function(req,res){
 
 function connectClients(clientID) {
 
-  var filtered = users.filter((item) => return !item.busy);
+  var filtered = users.filter((item) => {return !item.busy});
   if (filtered.length){
 
     let partner = undefined;
