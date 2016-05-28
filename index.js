@@ -24,11 +24,17 @@ function getRandomArbitrary(min, max) {
 
 function connectClients(clientID) {
 
+  // Let's find free users to chat with
   var filtered = users.filter((item) => {return !item.busy});
+
+  // If there is someone else one website except you
   if (filtered.length>1){
 
 
+    // Lets find in randomly select partner
     var partner = undefined;
+
+    // This block is to prevent connecting to yourself
     while (!partner){
       var randomInt = getRandomArbitrary(0, filtered.length);
       if (filtered[randomInt].id != clientID){
@@ -36,6 +42,7 @@ function connectClients(clientID) {
       }
     }
 
+    // Find myself in users list and set up proper values
     var firstClientIndex = users.findIndex((element, index)=>{
       if (element.id == clientID){
         return index;
@@ -45,6 +52,7 @@ function connectClients(clientID) {
     users[firstClientIndex].partner = partner.id;
 
 
+    // Find partner in users list and set up proper values
     var secondClientIndex = users.findIndex((element, index)=>{
       if (element.id == partner.id){
         return index;
@@ -53,23 +61,26 @@ function connectClients(clientID) {
     users[secondClientIndex].busy = true;
     users[secondClientIndex].partner = clientID;
 
-
+    // Send messages to the clients that they are connected
     io.sockets.socket(clientID).emit('status', {status: "connected", partner: partner.id});
     io.sockets.socket(partner.id).emit('status', {status: "connected", partner: clientID});
 
 
   } else {
 
+    // If there is not free users to connect - simpy wait untils someone else will connect.
     io.sockets.socket(clientID).emit('status', {status: "pending"});
 
   }
 
 }
 
+
+//Initialise user connection
 io.on('connection',function(socket){
 
   //
-  // Block 1 - Here we manage connect event
+  // Block 1 - Add new user to the common list
   //
   var client = {
     id: socket.id,
@@ -77,12 +88,11 @@ io.on('connection',function(socket){
   }
   users.push(client)
 
+  // And connect new user to someone else
   connectClients(socket.id)
 
 
-  //
-  // End of Block 1
-  //
+
 
   //
   // Block 2 - message exchange
@@ -100,11 +110,14 @@ io.on('connection',function(socket){
   // Block 3 - if user disconnect
   //
   socket.on('disconnect', function() {
+
+    // Find disconnected user Index in list
     var clientIndex = users.findIndex((element, index)=>{
       if (element.id == socket.id){
         return index;
       }
     })
+
 
     var client = users[clientIndex]
     // Check if user connected to any user
@@ -114,14 +127,24 @@ io.on('connection',function(socket){
           return index;
         }
       })
+
+      //Send message to partner that he is disconnected
       io.sockets.socket(users[parnerIndex].id).emit('status', {status: "pending"});
       users[parnerIndex].busy = false;
       users[parnerIndex].partner = undefined;
 
-      users.splice(clientIndex, 1);
+
+      // Try to connect disconnected user to somone else
       connectClients(users[parnerIndex].id);
 
+      // Remove disconnected user from common list
+      users.splice(clientIndex, 1);
+    } else {
+      // Remove disconnected user from common list
+      users.splice(clientIndex, 1);
     }
+
+
 
   });
 
