@@ -21,15 +21,15 @@ function connectClients(clientID) {
   var filtered = users.filter((item) => {return !item.busy});
   if (filtered.length){
 
-    let partner = undefined;
+    var partner = undefined;
     while (!partner){
-      let randomInt = Math.round(Math.random()*filtered.length);
+      var randomInt = Math.round(Math.random()*filtered.length);
       if (filtered[randomInt].id != clientID){
         partner = filtered[randomInt]
       }
     }
 
-    let firstClientIndex = users.findIndex((element, index)=>{
+    var firstClientIndex = users.findIndex((element, index)=>{
       if (element.id == clientID){
         return index;
       }
@@ -38,7 +38,7 @@ function connectClients(clientID) {
     users[firstClientIndex].partner = partner.id;
 
 
-    let secondClientIndex = users.findIndex((element, index)=>{
+    var secondClientIndex = users.findIndex((element, index)=>{
       if (element.id == partner.id){
         return index;
       }
@@ -64,7 +64,7 @@ io.on('connection',function(socket){
   //
   // Block 1 - Here we manage connect event
   //
-  let client = {
+  var client = {
     id: socket.id,
     busy: false
   }
@@ -93,16 +93,16 @@ io.on('connection',function(socket){
   // Block 3 - if user disconnect
   //
   socket.on('disconnect', function() {
-    let clientIndex = users.findIndex((element, index)=>{
+    var clientIndex = users.findIndex((element, index)=>{
       if (element.id == socket.id){
         return index;
       }
     })
 
-    let client = users[clientIndex]
+    var client = users[clientIndex]
     // Check if user connected to any user
     if (client.partner){
-      let parnerIndex = users.findIndex((element, index)=>{
+      var parnerIndex = users.findIndex((element, index)=>{
         if (element.id == socket.id){
           return index;
         }
