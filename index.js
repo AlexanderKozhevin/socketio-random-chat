@@ -44,22 +44,27 @@ function connectClients(clientID) {
       }
     }
 
+
     // Find myself in users list and set up proper values
-    var firstClientIndex = users.findIndex((element, index)=>{
-      if (element.id == clientID){
-        return index;
-      }
-    })
+		var firstClientIndex = -1;
+		users.forEach(function(element, index){
+			if (element.id == clientID){
+				firstClientIndex = index;
+			}
+		})
+
     users[firstClientIndex].busy = true;
     users[firstClientIndex].partner = partner.id;
 
 
     // Find partner in users list and set up proper values
-    var secondClientIndex = users.findIndex((element, index)=>{
-      if (element.id == partner.id){
-        return index;
-      }
-    })
+		var secondClientIndex = -1;
+		users.forEach(function(element, index){
+			if (element.id == partner.id){
+				secondClientIndex = index;
+			}
+		})
+
     users[secondClientIndex].busy = true;
     users[secondClientIndex].partner = clientID;
 
@@ -126,11 +131,13 @@ io.on('connection',function(socket){
       var client = users[clientIndex]
       // Check if user connected to any user
       if (client.partner){
-        var parnerIndex = users.findIndex((element, index)=>{
-          if (element.id == socket.id){
-            return index;
-          }
-        })
+
+				var parnerIndex = -1;
+				users.forEach(function(element, index){
+					if (element.id == socket.id){
+						parnerIndex = index;
+					}
+				})
 
         //Send message to partner that he is disconnected
         io.sockets.connected[users[parnerIndex].id].emit('status', {status: "pending"});
