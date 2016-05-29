@@ -23,6 +23,7 @@ function newUser(){
 
     }
     if (data.status=='connected'){
+      console.log(data.myid)
       $('.messages').show();
       $('.input-container').css('display', 'flex');
       $('.waiting').hide()

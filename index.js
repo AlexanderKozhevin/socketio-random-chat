@@ -73,8 +73,8 @@ function connectClients(clientID) {
     users[secondClientIndex].partner = clientID;
 
     // Send messages to the clients that they are connected
-    io.to(clientID).emit('status', {status: "connected", partner: partner.id});
-    io.to(partner.id).emit('status', {status: "connected", partner: clientID});
+    io.to(clientID).emit('status', {status: "connected", partner: partner.id, myid: clientID});
+    io.to(partner.id).emit('status', {status: "connected", partner: clientID, myid: partner.id});
 
 
   } else {
@@ -129,6 +129,10 @@ io.on('connection',function(socket){
 	      clientIndex = index;
       }
     })
+
+		console.log('^^^^^^^')
+		console.log(socket.id)
+		console.log(clientIndex)
 
 
     if (clientIndex!=-1){
