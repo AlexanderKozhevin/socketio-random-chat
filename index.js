@@ -43,9 +43,9 @@ function connectClients(clientID) {
     while (!partner){
       var randomInt = getRandomArbitrary(0, filtered.length);
 			console.log(randomInt)
-      if (filtered[randomInt].id != clientID){
+      // if (filtered[randomInt].id != clientID){
         // partner = filtered[randomInt]
-      }
+      // }
     }
 
     // Find myself in users list and set up proper values
