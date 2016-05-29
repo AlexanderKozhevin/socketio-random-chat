@@ -18,9 +18,6 @@ app.get('/',function(req,res){
 });
 
 
-function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
-}
 
 function connectClients(clientID) {
 
@@ -41,7 +38,7 @@ function connectClients(clientID) {
 
     // This block is to prevent connecting to yourself
     while (!partner){
-      var randomInt = getRandomArbitrary(0, filtered.length);
+      var randomInt = Math.round(Math.random()*filtered.length);
 			console.log(randomInt)
       // if (filtered[randomInt].id != clientID){
         // partner = filtered[randomInt]
