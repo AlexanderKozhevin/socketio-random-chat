@@ -73,8 +73,8 @@ function connectClients(clientID) {
     users[secondClientIndex].partner = clientID;
 
     // Send messages to the clients that they are connected
-    io.to[clientID].emit('status', {status: "connected", partner: partner.id});
-    io.to[partner.id].emit('status', {status: "connected", partner: clientID});
+    io.to(clientID).emit('status', {status: "connected", partner: partner.id});
+    io.to(partner.id).emit('status', {status: "connected", partner: clientID});
 
 
   } else {
@@ -109,7 +109,7 @@ io.on('connection',function(socket){
   // Block 2 - message exchange
   //
   socket.on('message', function (data) {
-    io.to[data.partner].emit('message', data);
+    io.to(data.partner).emit('message', data);
   });
   //
   // End of block2
