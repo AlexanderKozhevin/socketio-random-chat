@@ -141,7 +141,6 @@ io.on('connection',function(socket){
         //Send message to partner that he is disconnected
 				if (client.partner!=-1){
 
-					var parnerUsr = users[parnerIndex];
 
 					io.to(client.partner).emit('status', {status: "pending"});
 
@@ -155,7 +154,7 @@ io.on('connection',function(socket){
 					users[partnerIndex].busy = false
 
 					// Try to connect disconnected user to somone else
-					connectClients(users[parnerIndex].partner);
+					connectClients(client.partner);
 
 					// Remove disconnected user from common list
 					users.splice(clientIndex, 1);
