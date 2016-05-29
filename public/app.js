@@ -11,11 +11,11 @@ $(document).ready(function(){
   socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true});
 
   socket.on('status', function(data){
-    console.log('alskdjflajsklj')
     if (data.status=='pending'){
       $('.messages').hide()
       $('.input-container').hide()
       $('.waiting').show()
+      var myNode = document.getElementById("messages");
       while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
       }
@@ -25,7 +25,7 @@ $(document).ready(function(){
       $('.input-container').show()
       $('.waiting').hide()
       partner = data.partner;
-      var myNode = document.getElementById("messages");
+
     }
 
   })
