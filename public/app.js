@@ -10,9 +10,7 @@ function newUser(){
 
   socket.on('status', function(data){
 
-    console.log('messagesss')
     if (data.status=='pending'){
-      console.log('1--')
       $('.messages').hide()
       $('.input-container').hide()
       $('.waiting').css('display', 'flex');
@@ -23,7 +21,6 @@ function newUser(){
 
     }
     if (data.status=='connected'){
-      console.log(data.myid)
       $('.messages').show();
       $('.input-container').css('display', 'flex');
       $('.waiting').hide()
