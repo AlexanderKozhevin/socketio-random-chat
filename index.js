@@ -142,7 +142,11 @@ io.on('connection',function(socket){
 
         //Send message to partner that he is disconnected
 				if (parnerIndex!=-1){
-					io.sockets.connected[users[parnerIndex].id].emit('status', {status: "pending"});
+					console.log('--==-=-=--=')
+					console.log(users[parnerIndex])
+					console.log('--==-=-=--=')
+					var parnerUsr = users[parnerIndex];
+					io.sockets.connected[parnerUsr.id].emit('status', {status: "pending"});
 	        users[parnerIndex].busy = false;
 	        users[parnerIndex].partner = undefined;
 

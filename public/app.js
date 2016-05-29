@@ -22,7 +22,7 @@ $(document).ready(function(){
 
     }
     if (data.status=='connected'){
-      $('.messages').css('display', 'flex');
+      $('.messages').show();
       $('.input-container').css('display', 'flex');
       $('.waiting').hide()
       partner = data.partner;
