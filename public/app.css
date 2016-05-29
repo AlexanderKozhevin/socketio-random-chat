@@ -39,7 +39,7 @@ body{
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  display: none;
+
 }
 
 .content{
@@ -53,7 +53,7 @@ body{
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  /*display: none;*/
+  display: none;
 }
 .messages{
   flex: 1;
@@ -63,12 +63,12 @@ body{
   padding: 20px;
   padding-left: 40px;
   overflow: auto;
-  /*display: none;*/
+  display: none;
 }
 .input-container{
   height: 60px;
   width: 100%;
-  /*display: none;*/
+  display: none;
 }
 
 

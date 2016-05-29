@@ -15,10 +15,11 @@ $(document).ready(function(){
       $('.messages').hide()
       $('.input-container').hide()
       $('.waiting').show()
-      var myNode = document.getElementById("messages");
+      var myNode = document.querySelector(".messages");
       while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
       }
+
     }
     if (data.status=='connected'){
       $('.messages').show()
