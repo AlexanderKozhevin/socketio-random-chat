@@ -40,9 +40,12 @@ function connectClients(clientID) {
     while (!partner){
       var randomInt = Math.round(Math.random()*free.length-1);
 
-      if (free[randomInt].id != clientID){
-        partner = free[randomInt]
-      }
+			if(free[randomInt]){
+				if (free[randomInt].id != clientID){
+	        partner = free[randomInt]
+	      }	
+			}
+
     }
 
 
