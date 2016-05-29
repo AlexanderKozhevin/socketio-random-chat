@@ -43,7 +43,7 @@ function connectClients(clientID) {
 			if(free[randomInt]){
 				if (free[randomInt].id != clientID){
 	        partner = free[randomInt]
-	      }	
+	      }
 			}
 
     }
@@ -145,19 +145,26 @@ io.on('connection',function(socket){
 
         //Send message to partner that he is disconnected
 				if (parnerIndex!=-1){
-					console.log('--==-=-=--=')
-					console.log(users[parnerIndex])
-					console.log('--==-=-=--=')
+
 					var parnerUsr = users[parnerIndex];
-					io.sockets.connected[parnerUsr.id].emit('status', {status: "pending"});
-	        users[parnerIndex].busy = false;
-	        users[parnerIndex].partner = undefined;
+
+					if (io.sockets.connected[parnerUsr.id]){
 
 
-	        // Try to connect disconnected user to somone else
-	        connectClients(users[parnerIndex].id);
-					// Remove disconnected user from common list
-	        users.splice(clientIndex, 1);
+						io.sockets.connected[parnerUsr.id].emit('status', {status: "pending"});
+						users[parnerIndex].busy = false;
+						users[parnerIndex].partner = undefined;
+
+						io.sockets.connected[clientID].emit('status', {status: "connected", partner: partner.id});
+						io.sockets.connected[partner.id].emit('status', {status: "connected", partner: clientID});
+
+
+						// Try to connect disconnected user to somone else
+						connectClients(users[parnerIndex].id);
+						// Remove disconnected user from common list
+						users.splice(clientIndex, 1);
+
+					}
 				}
 
 
