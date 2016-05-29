@@ -10,6 +10,7 @@ function newUser(){
 
   socket.on('status', function(data){
     if (data.status=='pending'){
+      console.log('pendo--')
       $('.messages').hide()
       $('.input-container').hide()
       $('.waiting').css('display', 'flex');
