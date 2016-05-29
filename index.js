@@ -38,10 +38,10 @@ function connectClients(clientID) {
 
     // This block is to prevent connecting to yourself
     while (!partner){
-      var randomInt = Math.round(Math.random()*filtered.length) - 1;
+      var randomInt = Math.round(Math.random()*free.length) - 1;
 
       if (free[randomInt].id != clientID){
-        partner = filtered[randomInt]
+        partner = free[randomInt]
       }
     }
 
