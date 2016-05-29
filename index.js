@@ -26,9 +26,14 @@ function connectClients(clientID) {
 
   // Let's find free users to chat with
   var filtered = users.filter((item) => {return !item.busy});
-
+	var length = 0;
+	users.forEach(function(item){
+		if (item != busy){
+			length++;
+		}
+	})
   // If there is someone else one website except you
-  if (filtered.length>=2){
+  if (length>1){
 
 
     // Lets find in randomly select partner
