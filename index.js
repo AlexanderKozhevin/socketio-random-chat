@@ -151,15 +151,16 @@ io.on('connection',function(socket){
 				if (parnerIndex!=-1){
 
 					var parnerUsr = users[parnerIndex];
-
+					console.log(parnerUsr)
 					// io.sockets.connected[parnerUsr.id]
+
+					parnerUsr.busy = false;
+					parnerUsr.partner = undefined;
+
+
 					io.to(parnerUsr.id).emit('status', {status: "pending"});
-					users[parnerIndex].busy = false;
-					users[parnerIndex].partner = undefined;
-
-
 					// Try to connect disconnected user to somone else
-					connectClients(users[parnerIndex].id);
+					// connectClients(users[parnerIndex].id);
 					// Remove disconnected user from common list
 					users.splice(clientIndex, 1);
 
