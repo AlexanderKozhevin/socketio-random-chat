@@ -41,7 +41,7 @@ function connectClients(clientID) {
 
     // This block is to prevent connecting to yourself
     while (!partner){
-      var randomInt = getRandomArbitrary(0, filtered.length);
+      var randomInt = getRandomArbitrary(0, filtered.length+1);
       if (filtered[randomInt].id != clientID){
         partner = filtered[randomInt]
       }
@@ -120,7 +120,7 @@ io.on('connection',function(socket){
     var clientIndex = -1;
 		users.forEach(function(element, index){
       if (element.id == socket.id){
-	      clientIndex = index;  
+	      clientIndex = index;
       }
     })
 
