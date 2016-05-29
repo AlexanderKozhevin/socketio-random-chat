@@ -39,7 +39,7 @@ body{
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
+  display: none;
 }
 
 .content{
@@ -53,17 +53,22 @@ body{
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  display: none;
+  /*display: none;*/
 }
 .messages{
   flex: 1;
   width: 100%;
   border-bottom: 1px solid rgba(130,130,130,0.3);
-  display: none;
+  word-break: break-all;
+  padding: 20px;
+  padding-left: 40px;
+  overflow: auto;
+  /*display: none;*/
 }
 .input-container{
   height: 60px;
-  display: none;
+  width: 100%;
+  /*display: none;*/
 }
 
 
@@ -74,6 +79,7 @@ body{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  display: none;
 }
 .waiting img{
   width: 100px;
@@ -87,4 +93,18 @@ body{
   font-size: 20px;
   font-weight: 300;
   margin-top: 20px;
+}
+
+
+#messageinput{
+  padding: 0px;
+  width: 100%!important;
+  height: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: none;
+}
+
+input:focus{
+  outline: none!important;
 }
