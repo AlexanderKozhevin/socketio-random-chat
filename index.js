@@ -136,24 +136,27 @@ io.on('connection',function(socket){
       // Check if user connected to any user
       if (client.partner){
 
-				var parnerIndex = -1;
-				users.forEach(function(element, index){
-					if (element.id == socket.id){
-						parnerIndex = index;
-					}
-				})
+
 
         //Send message to partner that he is disconnected
-				if (parnerIndex!=-1){
+				if (client.partner!=-1){
 
 					var parnerUsr = users[parnerIndex];
 
-					io.to(parnerUsr.partner).emit('status', {status: "pending"});
-					parnerUsr.busy = false;
-					parnerUsr.partner = undefined;
+					io.to(client.partner).emit('status', {status: "pending"});
+
+					var partnerIndex = -1;
+					users.forEach(function(element, index){
+						if (element.id == client.partner){
+							partnerIndex = index;
+						}
+					})
+					users[partnerIndex].partner = undefined
+					users[partnerIndex].busy = false
 
 					// Try to connect disconnected user to somone else
-					connectClients(users[parnerIndex].id);
+					connectClients(users[parnerIndex].partner);
+
 					// Remove disconnected user from common list
 					users.splice(clientIndex, 1);
 
