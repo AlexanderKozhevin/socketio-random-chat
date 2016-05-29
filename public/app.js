@@ -3,12 +3,13 @@ var socket;
 var partner;
 function newUser(){
   username = document.querySelector('#username').value;
+  socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true});
   $('.nameinput').hide()
   $('.content').css('display', 'flex');
 }
 
 $(document).ready(function(){
-  socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true});
+
 
   socket.on('status', function(data){
     if (data.status=='pending'){
