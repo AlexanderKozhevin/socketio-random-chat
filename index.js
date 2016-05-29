@@ -117,15 +117,15 @@ io.on('connection',function(socket){
   socket.on('disconnect', function() {
 
     // Find disconnected user Index in list
-    var clientIndex = users.findIndex((element, index)=>{
+    var clientIndex = -1;
+		users.forEach(function(element, index){
       if (element.id == socket.id){
-        return index;
+	      clientIndex = index;  
       }
     })
 
-    console.log(clientIndex)
 
-    if (clientIndex){
+    if (clientIndex!=-1){
       var client = users[clientIndex]
       // Check if user connected to any user
       if (client.partner){
