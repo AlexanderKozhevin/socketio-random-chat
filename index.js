@@ -28,7 +28,7 @@ function connectClients(clientID) {
   var filtered = users.filter((item) => {return !item.busy});
 
   // If there is someone else one website except you
-  if (filtered.length>1){
+  if (filtered.length>=2){
 
 
     // Lets find in randomly select partner
