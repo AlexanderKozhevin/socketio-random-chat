@@ -28,7 +28,7 @@ function connectClients(clientID) {
   var filtered = users.filter((item) => {return !item.busy});
 	var length = 0;
 	users.forEach(function(item){
-		if (item != busy){
+		if (!item.item){
 			length++;
 		}
 	})
