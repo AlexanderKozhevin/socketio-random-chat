@@ -38,11 +38,10 @@ function connectClients(clientID) {
 
     // This block is to prevent connecting to yourself
     while (!partner){
-      var randomInt = Math.round(Math.random()*filtered.length);
-			console.log(randomInt)
-      // if (filtered[randomInt].id != clientID){
-        // partner = filtered[randomInt]
-      // }
+      var randomInt = Math.round(Math.random()*filtered.length-1);
+      if (filtered[randomInt].id != clientID){
+        partner = filtered[randomInt]
+      }
     }
 
     // Find myself in users list and set up proper values
