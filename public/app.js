@@ -4,7 +4,7 @@ var partner;
 function newUser(){
   username = document.querySelector('#username').value;
   $('.nameinput').hide()
-  $('.content').show()
+  $('.content').css('display', 'flex');
 }
 
 $(document).ready(function(){
@@ -14,7 +14,7 @@ $(document).ready(function(){
     if (data.status=='pending'){
       $('.messages').hide()
       $('.input-container').hide()
-      $('.waiting').show()
+      $('.waiting').css('display', 'flex');
       var myNode = document.querySelector(".messages");
       while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
@@ -22,8 +22,8 @@ $(document).ready(function(){
 
     }
     if (data.status=='connected'){
-      $('.messages').show()
-      $('.input-container').show()
+      $('.messages').css('display', 'flex');
+      $('.input-container').css('display', 'flex');
       $('.waiting').hide()
       partner = data.partner;
 
