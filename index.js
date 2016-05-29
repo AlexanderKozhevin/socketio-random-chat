@@ -22,15 +22,15 @@ app.get('/',function(req,res){
 function connectClients(clientID) {
 
   // Let's find free users to chat with
-  var filtered = users.filter((item) => {return !item.busy});
-	var length = 0;
+	var free = []
 	users.forEach(function(item){
-		if (!item.item){
-			length++;
+		if (!item.busy){
+			free.push(item)
 		}
 	})
+
   // If there is someone else one website except you
-  if (length>1){
+  if (free.length>1){
 
 
     // Lets find in randomly select partner
@@ -40,7 +40,7 @@ function connectClients(clientID) {
     while (!partner){
       var randomInt = Math.round(Math.random()*filtered.length) - 1;
 
-      if (filtered[randomInt].id != clientID){
+      if (free[randomInt].id != clientID){
         partner = filtered[randomInt]
       }
     }
