@@ -9,7 +9,7 @@ function newUser(){
   socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true});
 
   socket.on('status', function(data){
-
+    console.log(data.status)
     if (data.status=='pending'){
       $('.messages').hide()
       $('.input-container').hide()
