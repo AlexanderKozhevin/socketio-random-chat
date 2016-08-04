@@ -23,7 +23,7 @@ function newUser(){
 
   // Status message from server
   socket.on('status', function(data){
-
+    console.log(data.status)
     // if There are not partners
     if (data.status=='pending'){
       $('.messages').hide()
