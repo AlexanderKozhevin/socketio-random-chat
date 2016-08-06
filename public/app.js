@@ -17,7 +17,7 @@ function newUser(){
   $('.nameinput').hide()
   $('.content').css('display', 'flex');
 
-  $.get( "https://damp-waters-91942.herokuapp.com?user"+username, function( data ) {
+  $.get( "https://damp-waters-91942.herokuapp.com/isnamefree?user"+username, function( data ) {
     if (data=='busy'){
       alert('Username is already taken')
     } else {
