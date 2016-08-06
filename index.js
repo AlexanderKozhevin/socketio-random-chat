@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 var cors = require('cors');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -10,6 +11,7 @@ var users = [{id: undefined, busy: true, name: md5("Hank")}];
 console.log(users)
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get('/',function(req,res){
 
