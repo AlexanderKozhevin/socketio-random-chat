@@ -14,13 +14,13 @@ function newUser(){
 
   // Lets store the usrename andhide the input box
   username = document.querySelector('#username').value;
-  $('.nameinput').hide()
-  $('.content').css('display', 'flex');
-  console.log(username)
+
   $.get( "https://damp-waters-91942.herokuapp.com/isnamefree?user="+username, function( data ) {
     if (data=='busy'){
       alert('Username is already taken')
     } else {
+      $('.nameinput').hide()
+      $('.content').css('display', 'flex');
       Initialise()
     }
   });
