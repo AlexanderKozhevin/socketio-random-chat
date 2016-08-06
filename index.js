@@ -7,7 +7,7 @@ var PORT = process.env.PORT || 8080;
 const md5 = require('md5')
 const _ = require('lodash')
 var users = [{id: undefined, busy: true, name: md5("Hank")}];
-
+console.log(users)
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
 
@@ -24,7 +24,7 @@ app.get('/',function(req,res){
 //
 
 app.get('/isnamefree',function(req,res){
-
+	console.log(req.query.user)
 	var user = _.findIndex(users, {name: md5(req.query.user)});
 	if (user == -1){
 		res.send('ok')
