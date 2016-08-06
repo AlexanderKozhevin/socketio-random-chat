@@ -6,7 +6,7 @@ var io = require('socket.io')(http);
 var PORT = process.env.PORT || 8080;
 const md5 = require('md5')
 const _ = require('lodash')
-var users = ["Hank"];
+var users = [{id: undefined, busy: true, name: md5("Hank")}];
 
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
