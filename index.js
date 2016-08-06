@@ -5,7 +5,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var PORT = process.env.PORT || 8080;
 const md5 = require('md5')
-var users = [];
+const _ = require('lodash')
+var users = ["Hank"];
 
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
@@ -15,6 +16,22 @@ app.get('/',function(req,res){
 	// request : son cabeceras y datos que nos envia el navegador.
 	// response : son todo lo que enviamos desde el servidor.
 	res.sendFile(__dirname + 'index.html');
+});
+
+
+//
+// Function that  checks whether the user with suck name already exist
+//
+
+app.get('/isnamefree',function(req,res){
+
+	var user = _.findIndex(users, {name: md5(req.query.user)});
+	if (user == -1){
+		res.send('ok')
+	} else {
+		res.send('busy')
+	}
+
 });
 
 
@@ -89,16 +106,13 @@ function connectClients(clientID) {
 
 //Initialise user connection
 io.on('connection',function(socket){
-	console.log('* * *')
-	console.log(socket.handshake.query.user)
-	console.log('* * *')
   //
   // Block 1 - Add new user to the common list
   //
   var client = {
     id: socket.id,
     busy: false,
-		name: md5()
+		name: md5(socket.handshake.query.user)
   }
   users.push(client)
 

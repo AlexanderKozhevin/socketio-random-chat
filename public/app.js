@@ -17,8 +17,21 @@ function newUser(){
   $('.nameinput').hide()
   $('.content').css('display', 'flex');
 
+  $.get( "https://damp-waters-91942.herokuapp.com?user"+username, function( data ) {
+    if (data=='busy'){
+      alert('Username is already taken')
+    } else {
+      Initialise()
+    }
+  });
+
+}
+
+
+// Let's start up Socket.io on client side
+function Initialise(){
   // Initialise connection to server
-  socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true, query: ("user=genius")});
+  socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true, query: ("user="+username)});
 
 
   // Status message from server
@@ -59,8 +72,6 @@ function newUser(){
 
   })
 }
-
-
 
 // When you press enter in message input box
 function pressEvent(event){
