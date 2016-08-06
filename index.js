@@ -4,7 +4,7 @@ var cors = require('cors');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var PORT = process.env.PORT || 8080;
-
+const md5 = require('md5')
 var users = [];
 
 app.use(express.static(__dirname + '/public'));
