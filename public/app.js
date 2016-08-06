@@ -16,8 +16,8 @@ function newUser(){
   username = document.querySelector('#username').value;
   $('.nameinput').hide()
   $('.content').css('display', 'flex');
-
-  $.get( "https://damp-waters-91942.herokuapp.com/isnamefree?user"+username, function( data ) {
+  console.log(username)
+  $.get( "https://damp-waters-91942.herokuapp.com/isnamefree?user="+username, function( data ) {
     if (data=='busy'){
       alert('Username is already taken')
     } else {
