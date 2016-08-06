@@ -89,13 +89,14 @@ function connectClients(clientID) {
 
 //Initialise user connection
 io.on('connection',function(socket){
-
+	console.log(socket)
   //
   // Block 1 - Add new user to the common list
   //
   var client = {
     id: socket.id,
-    busy: false
+    busy: false,
+		name: md5()
   }
   users.push(client)
 
@@ -153,11 +154,13 @@ io.on('connection',function(socket){
 					users[partnerIndex].partner = undefined
 					users[partnerIndex].busy = false
 
-					// Try to connect disconnected user to somone else
-					connectClients(client.partner);
+
 
 					// Remove disconnected user from common list
 					users.splice(clientIndex, 1);
+
+					// Try to connect disconnected user to somone else
+					connectClients(client.partner);
 
 
 				}

@@ -18,7 +18,7 @@ function newUser(){
   $('.content').css('display', 'flex');
 
   // Initialise connection to server
-  socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true});
+  socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true, query: ("user=genius")});
 
 
   // Status message from server
