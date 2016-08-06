@@ -90,7 +90,7 @@ function connectClients(clientID) {
 //Initialise user connection
 io.on('connection',function(socket){
 	console.log('* * *')
-	console.log(socket.handshake)
+	console.log(socket.handshake.query.user)
 	console.log('* * *')
   //
   // Block 1 - Add new user to the common list
