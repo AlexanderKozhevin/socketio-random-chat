@@ -11,6 +11,9 @@ var users = [{id: undefined, busy: true, name: md5("Hank")}];
 console.log(users)
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
 
 app.get('/',function(req,res){
