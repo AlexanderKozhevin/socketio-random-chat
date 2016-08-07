@@ -7,7 +7,7 @@ var io = require('socket.io')(http);
 var PORT = process.env.PORT || 8080;
 const md5 = require('md5')
 const _ = require('lodash')
-var users = [{id: undefined, busy: true, name: md5("Hank")}];
+var users = [];
 console.log(users)
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
@@ -27,18 +27,14 @@ app.get('/',function(req,res){
 //
 // Function that  checks whether the user with suck name already exist
 //
-
 app.get('/isnamefree',function(req,res){
-	console.log(req.query.user)
 	var user = _.findIndex(users, {name: md5(req.query.user)});
 	if (user == -1){
 		res.send('ok')
 	} else {
 		res.send('busy')
 	}
-
 });
-
 
 
 function connectClients(clientID) {
@@ -60,6 +56,7 @@ function connectClients(clientID) {
 
     // This block is to prevent connecting to yourself
     while (!partner){
+      
       var randomInt = Math.round(Math.random()*free.length-1);
 
 			if(free[randomInt]){
@@ -123,7 +120,6 @@ io.on('connection',function(socket){
 
   // And connect new user to someone else
   connectClients(socket.id)
-
 
 
 

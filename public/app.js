@@ -31,8 +31,22 @@ function newUser(){
 // Let's start up Socket.io on client side
 function Initialise(){
   // Initialise connection to server
-  socket = io.connect('https://damp-waters-91942.herokuapp.com', {secure: true, query: ("user="+username)});
+  socket = io.connect('https://damp-waters-91942.herokuapp.com', {
+    secure: true,
+    query: ("user="+username),
+    reconnection: true,
+    reconnectionDelay: 500,
+    reconnectionAttempts: 60
+  });
 
+
+  socket.on('disconnect', function(){
+    console.log('disconnect')
+    setTimeout(function(){
+      $('.nameinput').show()
+      $('.content').css('display', 'none');
+    }, 30000)
+  });
 
   // Status message from server
   socket.on('status', function(data){
@@ -57,8 +71,20 @@ function Initialise(){
       $('.input-container').css('display', 'flex');
       $('.waiting').hide()
       partner = data.partner;
-
     }
+
+    if (data.status=='waituser'){
+      $('.messages').hide()
+      $('.input-container').hide()
+      $('.waiting').css('display', 'flex');
+    }
+
+    if (data.status=='reconnect'){
+      $('.messages').show();
+      $('.input-container').css('display', 'flex');
+      $('.waiting').hide()
+    }
+
 
   })
 
