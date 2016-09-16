@@ -8,12 +8,17 @@ var PORT = process.env.PORT || 8080;
 const md5 = require('md5')
 const _ = require('lodash')
 var users = [];
-console.log(users)
+
+var freezer = {};
+
 app.use(express.static(__dirname + '/public'));
+
 app.use(cors());
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
 app.use(bodyParser.json());
 
 app.get('/',function(req,res){
@@ -56,7 +61,7 @@ function connectClients(clientID) {
 
     // This block is to prevent connecting to yourself
     while (!partner){
-      
+
       var randomInt = Math.round(Math.random()*free.length-1);
 
 			if(free[randomInt]){
@@ -106,20 +111,42 @@ function connectClients(clientID) {
 }
 
 
+function reconnectusers(userA, userB){
+
+      // userA - the one who has been disconnected
+      //
+
+      userB.partner = userA.id;
+      io.to(userB.id).emit('status', {status: "connected", partner: userA.id, myid: userB.id});
+
+}
+
+
 //Initialise user connection
 io.on('connection',function(socket){
   //
   // Block 1 - Add new user to the common list
   //
-  var client = {
-    id: socket.id,
-    busy: false,
-		name: md5(socket.handshake.query.user)
-  }
-  users.push(client)
 
-  // And connect new user to someone else
-  connectClients(socket.id)
+  var isInList = _.find(users, {name: socket.handshake.query.user})
+
+  if (!isInList){
+    var client = {
+      id: socket.id,
+      busy: false,
+      name: md5(socket.handshake.query.user)
+    }
+    users.push(client)
+    // And connect new user to someone else
+    connectClients(socket.id)
+  } else {
+
+    clearTimeout(freezer[isInList.name])
+    isInList.id = socket.id
+    var second = _.find(users, {id: isInList.partner})
+    reconnectusers(isInList, second)
+
+  }
 
 
 
@@ -132,6 +159,8 @@ io.on('connection',function(socket){
   //
   // End of block2
   //
+
+
 
 
 
@@ -154,44 +183,36 @@ io.on('connection',function(socket){
       // Check if user connected to any user
       if (client.partner){
 
-
-
         //Send message to partner that he is disconnected
 				if (client.partner!=-1){
 
-
 					io.to(client.partner).emit('status', {status: "pending"});
 
-					var partnerIndex = -1;
-					users.forEach(function(element, index){
-						if (element.id == client.partner){
-							partnerIndex = index;
-						}
-					})
-					users[partnerIndex].partner = undefined
-					users[partnerIndex].busy = false
+          freezer[client.name] = setTimeout(()=>{
 
+            var partnerIndex = -1;
+  					users.forEach(function(element, index){
+  						if (element.id == client.partner){
+  							partnerIndex = index;
+  						}
+  					})
+  					users[partnerIndex].partner = undefined
+  					users[partnerIndex].busy = false
 
+  					// Remove disconnected user from common list
+  					users.splice(clientIndex, 1);
+            connectClients(client.partner);
 
-					// Remove disconnected user from common list
-					users.splice(clientIndex, 1);
-
+          }, 20000)
 					// Try to connect disconnected user to somone else
-					connectClients(client.partner);
-
 
 				}
-
-
 
       } else {
         // Remove disconnected user from common list
         users.splice(clientIndex, 1);
       }
     }
-
-
-
 
   });
 
@@ -200,5 +221,5 @@ io.on('connection',function(socket){
 
 
 http.listen(PORT,function(){
-	console.log('el servidor esta escuchando el puerto %s',PORT);
+	console.log('Listen to port',PORT);
 });
