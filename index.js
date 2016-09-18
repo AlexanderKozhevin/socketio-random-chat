@@ -170,7 +170,7 @@ io.on('connection',function(socket){
   socket.on('disconnect', function() {
 
 
-    console.log('Yo yea yao')
+
     // Find disconnected user Index in list
     var clientIndex = -1;
 		users.forEach(function(element, index){
@@ -186,9 +186,12 @@ io.on('connection',function(socket){
       if (client.partner){
 
         //Send message to partner that he is disconnected
-				if (client.partner!=-1){
+        var part = _.find(users, {id: client.partner})
+				if ((client.partner!=-1) && (!part.waiting)){
 
 					io.to(client.partner).emit('status', {status: "pending"});
+
+          client.waiting = true;
 
           freezer[client.name] = setTimeout(()=>{
 
@@ -202,13 +205,17 @@ io.on('connection',function(socket){
   					users[partnerIndex].busy = false
 
   					// Remove disconnected user from common list
-  					users.splice(clientIndex, 1);
-            connectClients(client.partner);
+            var ind = _.findIndex(users, {name: client.name})
+            connectClients(users[ind].partner);
+  					users.splice(ind, 1);
+
 
           }, 20000)
 					// Try to connect disconnected user to somone else
 
-				}
+				} else {
+          users.splice(clientIndex, 1);
+        }
 
       } else {
         // Remove disconnected user from common list
