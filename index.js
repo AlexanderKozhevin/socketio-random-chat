@@ -118,6 +118,7 @@ function reconnectusers(userA, userB){
 
       userB.partner = userA.id;
       io.to(userB.id).emit('status', {status: "connected", partner: userA.id, myid: userB.id});
+      io.to(userA.id).emit('status', {status: "connected", partner: userB.id, myid: userA.id});
 
 }
 
@@ -127,7 +128,6 @@ io.on('connection',function(socket){
   //
   // Block 1 - Add new user to the common list
   //
-
   var isInList = _.find(users, {name: socket.handshake.query.user})
 
   if (!isInList){
