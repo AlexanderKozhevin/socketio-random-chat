@@ -169,6 +169,8 @@ io.on('connection',function(socket){
   //
   socket.on('disconnect', function() {
 
+
+    console.log('Yo yea yao')
     // Find disconnected user Index in list
     var clientIndex = -1;
 		users.forEach(function(element, index){
