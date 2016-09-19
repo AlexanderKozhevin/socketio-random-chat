@@ -15,7 +15,7 @@ function newUser(){
   // Lets store the usrename andhide the input box
   username = document.querySelector('#username').value;
 
-  $.get( "https://damp-waters-91942.herokuapp.com/isnamefree?user="+username, function( data ) {
+  $.get( "http://localhost:8080/isnamefree?user="+username, function( data ) {
     if (data=='busy'){
       alert('Username is already taken')
     } else {
@@ -31,7 +31,7 @@ function newUser(){
 // Let's start up Socket.io on client side
 function Initialise(){
   // Initialise connection to server
-  socket = io.connect('https://damp-waters-91942.herokuapp.com', {
+  socket = io.connect('http://localhost:8080', {
     secure: true,
     query: ("user="+username),
     reconnection: true,

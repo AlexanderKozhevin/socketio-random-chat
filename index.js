@@ -45,91 +45,50 @@ app.get('/isnamefree',function(req,res){
 function connectClients(clientID) {
 
   // Let's find free users to chat with
-	var free = []
-	users.forEach(function(item){
-		if (!item.busy){
-			free.push(item)
-		}
-	})
+  var free = _.filter(users, {busy: false})
 
   // If there is someone else one website except you
   if (free.length>1){
 
-
-    // Lets find in randomly select partner
     var partner = undefined;
-
-    // This block is to prevent connecting to yourself
     while (!partner){
-
       var randomInt = Math.round(Math.random()*free.length-1);
-
 			if(free[randomInt]){
-				if (free[randomInt].id != clientID){
+				if ((free[randomInt].id != clientID) && (!free[randomInt].busy)){
 	        partner = free[randomInt]
 	      }
 			}
-
     }
 
+    firstClient = _.find(users, {id: clientID})
+    firstClient.busy = true;
+    firstClient.partner = partner.id;
 
-    // Find myself in users list and set up proper values
-		var firstClientIndex = -1;
-		users.forEach(function(element, index){
-			if (element.id == clientID){
-				firstClientIndex = index;
-			}
-		})
+    partner.busy = true;
+    partner.partner = clientID;
 
-    users[firstClientIndex].busy = true;
-    users[firstClientIndex].partner = partner.id;
-
-
-    // Find partner in users list and set up proper values
-		var secondClientIndex = -1;
-		users.forEach(function(element, index){
-			if (element.id == partner.id){
-				secondClientIndex = index;
-			}
-		})
-
-    users[secondClientIndex].busy = true;
-    users[secondClientIndex].partner = clientID;
-
-    // Send messages to the clients that they are connected
-    io.to(clientID).emit('status', {status: "connected", partner: partner.id, myid: clientID});
-    io.to(partner.id).emit('status', {status: "connected", partner: clientID, myid: partner.id});
+    io.to(clientID).emit('status', {status: "connected", partner: partner.id});
+    io.to(partner.id).emit('status', {status: "connected", partner: clientID});
 
 
   } else {
-
-    // If there is not free users to connect - simpy wait untils someone else will connect.
     io.to(clientID).emit('status', {status: "pending"});
-
   }
 
 }
 
 
 function reconnectusers(userA, userB){
-
-      // userA - the one who has been disconnected
-      //
-
-      userB.partner = userA.id;
-      io.to(userB.id).emit('status', {status: "connected", partner: userA.id, myid: userB.id});
-      io.to(userA.id).emit('status', {status: "connected", partner: userB.id, myid: userA.id});
-
+    userB.partner = userA.id;
+    io.to(userB.id).emit('status', {status: "connected", partner: userA.id});
+    io.to(userA.id).emit('status', {status: "connected", partner: userB.id});
 }
 
 
-//Initialise user connection
 io.on('connection',function(socket){
-  //
-  // Block 1 - Add new user to the common list
-  //
-  var isInList = _.find(users, {name: socket.handshake.query.user})
 
+  var isInList = _.find(users, {name: md5(socket.handshake.query.user)})
+  console.log(socket.handshake.query.user)
   if (!isInList){
     var client = {
       id: socket.id,
@@ -169,57 +128,43 @@ io.on('connection',function(socket){
   //
   socket.on('disconnect', function() {
 
+    var user = _.find(users, {id: socket.id})
 
+    if (user){
 
-    // Find disconnected user Index in list
-    var clientIndex = -1;
-		users.forEach(function(element, index){
-      if (element.id == socket.id){
-	      clientIndex = index;
+      if (user.partner){
+        var partner = _.find(users, {id: user.partner})
+        if (partner.waiting){
+          var index = _.findIndex(users, {id: partner.id})
+          users.splice(index, 1)
+          user.partner = null;
+        }
       }
-    })
-
-
-    if (clientIndex!=-1){
-      var client = users[clientIndex]
       // Check if user connected to any user
-      if (client.partner){
+      if (user.partner){
 
-        //Send message to partner that he is disconnected
-        var part = _.find(users, {id: client.partner})
-				if ((client.partner!=-1) && (!part.waiting)){
+          var partner = _.find(users, {id: client.partner})
+					io.to(partner.id).emit('status', {status: "pending"});
+          user.waiting = true;
+          console.log('here :)')
+          freezer[user.name] = setTimeout(function(){
+            console.log('delete')
 
-					io.to(client.partner).emit('status', {status: "pending"});
+  					partner.partner = undefined
+  					partner.busy = false
 
-          client.waiting = true;
+            var index = _.findIndex(users, {id: user.id})
+            users.splice(index, 1)
+            connectClients(partner.id);
 
-          freezer[client.name] = setTimeout(()=>{
-
-            var partnerIndex = -1;
-  					users.forEach(function(element, index){
-  						if (element.id == client.partner){
-  							partnerIndex = index;
-  						}
-  					})
-  					users[partnerIndex].partner = undefined
-  					users[partnerIndex].busy = false
-
-  					// Remove disconnected user from common list
-            var ind = _.findIndex(users, {name: client.name})
-            connectClients(users[ind].partner);
-  					users.splice(ind, 1);
-
-
-          }, 20000)
+          }, 5000)
 					// Try to connect disconnected user to somone else
 
-				} else {
-          users.splice(clientIndex, 1);
-        }
+
 
       } else {
-        // Remove disconnected user from common list
-        users.splice(clientIndex, 1);
+        var index = _.findIndex(users, {id: user.id})
+        users.splice(index, 1)
       }
     }
 
