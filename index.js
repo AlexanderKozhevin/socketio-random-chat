@@ -143,10 +143,9 @@ io.on('connection',function(socket){
       // Check if user connected to any user
       if (user.partner){
 
-          var partner = _.find(users, {id: client.partner})
+          var partner = _.find(users, {id: user.partner})
 					io.to(partner.id).emit('status', {status: "pending"});
           user.waiting = true;
-          console.log('here :)')
           freezer[user.name] = setTimeout(function(){
             console.log('delete')
 
